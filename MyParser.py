@@ -2,14 +2,17 @@ __author__ = 'Damon Hayhurst'
 
 from boilerpipe.extract import Extractor
 from bs4 import BeautifulSoup
+from sumy.summarizers.lex_rank import LexRankSummarizer
+from sumy.parsers.plaintext import PlaintextParser
+from sumy.nlp.tokenizers import Tokenizer
 import urllib3
 
 
 class MyParser:
 
     def __init__(self, url):
-        self.url = url
         http = urllib3.PoolManager()
+        self.url = url
         page = http.request('GET', url) #retrieve content from html
         self.source = page.data
         self.soup = BeautifulSoup(self.source)
@@ -49,4 +52,11 @@ class MyParser:
         soup = self.soup
         edit_tag = soup.find("div", {"class": "editorial"})
         return edit_tag
+
+    def getSummary(self):
+        lex_rank = LexRankSummarizer()
+        parser = PlaintextParser.from_string(self.bpArtGetText(), Tokenizer('english'))
+        summary = lex_rank(parser.document, 2)
+
+
 

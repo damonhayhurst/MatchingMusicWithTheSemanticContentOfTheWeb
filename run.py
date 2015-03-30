@@ -5,6 +5,7 @@ testUrl = 'http://www.bbc.com/news/technology-31552029'
 testSentence = "This is an ultimate, to beat Chelsea, who I think will go on and win the Champion's League - it really is."
 
 parser = MyParser.MyParser(testUrl)
+print(parser.getSummary())
 # tuples = preprocess(parser.getText(), True)
 # reader = readEmoData()
 # reader = nameVsArousal(reader)
@@ -29,6 +30,7 @@ parser = MyParser.MyParser(testUrl)
 #print(songs)
 
 text = parser.bpArtGetText()
+print(text)
 tokenized = semantics.tokenize(text)
 aro_score = semantics.lookup_arousal(tokenized)
 print(aro_score)

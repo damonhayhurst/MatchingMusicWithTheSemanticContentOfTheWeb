@@ -34,6 +34,20 @@ def read_arousal():
         lookup.update({row['Word']: float(row['AroMn'])})
     return lookup
 
+class Sentences(object):
+    def __init__(self, path):
+        self.path = path
+
+    def __iter__(self):
+        file = open(self.path, 'r')
+        for i, line in enumerate(file):
+            line = line.lower()
+            line = tokenize(line)
+            line = remove_stops(line)
+            if line:
+                yield line
+        file.close()
+
 def filter_lookup(lookup):
     lookup_list = lookup.items()
     sorted_lookup_list = sorted(lookup_list, key=lambda x: x[1])
@@ -63,6 +77,7 @@ def lookup_arousal(tokenized):
         else:
             continue
     return total / count
+
 
 
 
