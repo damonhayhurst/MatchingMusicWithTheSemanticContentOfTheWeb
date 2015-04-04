@@ -4,8 +4,10 @@ genresUrl = 'http://labrosa.ee.columbia.edu/millionsong/sites/default/files/Addi
 testUrl = 'http://www.bbc.com/news/technology-31552029'
 testSentence = "This is an ultimate, to beat Chelsea, who I think will go on and win the Champion's League - it really is."
 
-parser = MyParser.MyParser(testUrl)
-print(parser.getSummary())
+tagUrl = semantics.tagSearch('electronic', 'disco')
+print(tagUrl)
+parser = MyParser.MyParser(tagUrl)
+print(parser.getUrls)
 # tuples = preprocess(parser.getText(), True)
 # reader = readEmoData()
 # reader = nameVsArousal(reader)
@@ -29,8 +31,9 @@ print(parser.getSummary())
 #songs = getEnSongs(artists[0], 0.3)
 #print(songs)
 
-text = parser.bpArtGetText()
-print(text)
-tokenized = semantics.tokenize(text)
-aro_score = semantics.lookup_arousal(tokenized)
-print(aro_score)
+# tokenized = semantics.tokenize(text)
+# tuples = semantics.pos_tag(tokenized, False)
+# entities = semantics.entities(tuples)
+# print(entities)
+#aro_score = semantics.lookup_arousal(tokenized)
+#print(aro_score)

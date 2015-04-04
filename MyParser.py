@@ -6,6 +6,8 @@ from sumy.summarizers.lex_rank import LexRankSummarizer
 from sumy.parsers.plaintext import PlaintextParser
 from sumy.nlp.tokenizers import Tokenizer
 import urllib3
+import json
+import re
 
 
 class MyParser:
@@ -16,6 +18,7 @@ class MyParser:
         page = http.request('GET', url) #retrieve content from html
         self.source = page.data
         self.soup = BeautifulSoup(self.source)
+        self.result_count = None
         #BeautifulSoup - Html Parser http://www.crummy.com/software/BeautifulSoup/bs4/doc/
         self.text = self.soup.get_text()
 
@@ -53,10 +56,38 @@ class MyParser:
         edit_tag = soup.find("div", {"class": "editorial"})
         return edit_tag
 
-    def getSummary(self):
+    def getSummary(self, num_sentences):
         lex_rank = LexRankSummarizer()
-        parser = PlaintextParser.from_string(self.bpArtGetText(), Tokenizer('english'))
-        summary = lex_rank(parser.document, 2)
+        text = str(self.bpLargGetText())
+        parser = PlaintextParser.from_string(text, Tokenizer('english'))
+        summary = lex_rank(parser.document, num_sentences)
+        return summary
+
+
+    @property
+    def getUrls(self):
+        text = self.getText()
+        results = json.loads(text)
+        urlresults = results['responseData']['results']
+        urls = []
+        head = len('http://www.last.fm/music/')
+        tail = len('/%2Btags')
+        reg = re.compile('/')
+        self.result_count = int(results['responseData']['cursor']['estimatedResultCount'])
+        for result in urlresults:
+            url = result['url']
+            url = url[head:-tail]
+            url = url.replace('%2B', ' ')
+            match = reg.search(url)
+            if match is not None:
+                slash = match.start()
+                url = (url[:slash], url[(slash + 1):])
+            else:
+                url = (url, None)
+            urls.append(url)
+        return urls
+
+
 
 
 

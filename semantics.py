@@ -1,7 +1,9 @@
 from __future__ import division
 import nltk
+from nltk.tag import map_tag
 from nltk.corpus import stopwords
 import csv
+import json
 
 __author__ = 'Damon Hayhurst'
 
@@ -9,8 +11,10 @@ def tokenize(document):
     tokenized = nltk.word_tokenize(document)
     return tokenized
 
-def pos_tag(tokenized):
-    tuples = nltk.pos_tag(tokenized, tagset='universal')
+def pos_tag(tokenized, simplified=True):
+    tuples = nltk.pos_tag(tokenized)
+    if simplified:
+        tuples = [(word, map_tag('en-ptb', 'universal', tag)) for word, tag in tuples]
     return tuples
 
 def remove_stops(document):
@@ -20,11 +24,16 @@ def remove_stops(document):
 
 def entities(tuples):
     chunky = nltk.ne_chunk(tuples)
-    return chunky
+    entities = [' '.join([y[0] for y in chunk.leaves()]) for chunk in chunky.subtrees() if chunk.label() == "PERSON" or chunk.label() == "ORGANIZATION" or chunk.label() == "LOCATION" or chunk.label() == "DATE" or chunk.label() == "FACILITY" or chunk.label() == "GPE"]
+    return entities
 
 def verbs(tuples):
     verbs = [wt[0] for (wt, _) in tuples if wt[1] == 'VERB']
     return verbs
+
+def adjectives(tuples):
+    adjectives = [wt[0] for (wt, _) in tuples if wt[1] == 'ADJ']
+    return adjectives
 
 def read_arousal():
     file = open('emoFile.txt', 'r')
@@ -78,12 +87,32 @@ def lookup_arousal(tokenized):
             continue
     return total / count
 
+def tagSearch(*tags):
+    url = 'http://ajax.googleapis.com/ajax/services/search/web?v=1.0&q='
+    query = 'site:last.fm%2Fmusic+intitle:"tags+for"'
+    for tag in tags:
+        tag = '+' + '"' + tag + '"'
+        query += tag
+    url = url + query
+    return str(url)
+
+
+
+
+# class TagMaker:
+#
+#     sentences = []
+#
+#     def __init__(self, *sentences):
+#         sentences = self.sentences
+#
+#     def __iter__(self):
 
 
 
 aro_lookup = filter_lookup(read_arousal())
 
-genresUrl = 'http://labrosa.ee.columbia.edu/millionsong/sites/default/files/AdditionalFiles/unique_terms.txt';
+genresUrl = 'http://labrosa.ee.columbia.edu/millionsong/sites/default/files/AdditionalFiles/unique_terms.txt'
 testUrl = 'http://www.bbc.co.uk/sport/0/football/30970439'
 testSentence = 'This is an ultimate, to beat Chelsea, who I think will go on and win the Champions League - it really is.'
 
