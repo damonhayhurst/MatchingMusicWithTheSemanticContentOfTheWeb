@@ -61,20 +61,22 @@ class MyParser:
         text = str(self.bpLargGetText())
         parser = PlaintextParser.from_string(text, Tokenizer('english'))
         summary = lex_rank(parser.document, num_sentences)
-        return summary
+        sentences = []
+        for sent in summary:
+            sentences.append(str(sent))
+        return sentences
 
 
-    @property
     def getUrls(self):
         text = self.getText()
         results = json.loads(text)
-        urlresults = results['responseData']['results']
+        url_results = results['responseData']['results']
         urls = []
         head = len('http://www.last.fm/music/')
         tail = len('/%2Btags')
         reg = re.compile('/')
         self.result_count = int(results['responseData']['cursor']['estimatedResultCount'])
-        for result in urlresults:
+        for result in url_results:
             url = result['url']
             url = url[head:-tail]
             url = url.replace('%2B', ' ')

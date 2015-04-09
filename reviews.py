@@ -1,6 +1,5 @@
 from gensim.models import word2vec
 import logging
-from semantics import Sentences
 import csv
 import os
 import urllib3
@@ -54,4 +53,8 @@ def save_model(sentences_file):
     sentences = Sentences(sentences_file)
     model = word2vec.Word2Vec(sentences, size=20, workers=2, min_count=50, sample=1e-5)
     model.save(model_path)
+
+def get_model():
+    return model
+
 
