@@ -1,51 +1,19 @@
-import MyParser, semantics, api_calls, reviews
+from my_parser import MyParser
+from aro_lookup import AroLookup
+import semantics, api_calls
+import sys
 
 genresUrl = 'http://labrosa.ee.columbia.edu/millionsong/sites/default/files/AdditionalFiles/unique_terms.txt'
 testUrl = 'http://www.bbc.com/news/technology-31552029'
 testSentence = "This is an ultimate, to beat Chelsea, who I think will go on and win the Champion's League - it really is."
 
-tagUrl = semantics.tagSearch('electronic', 'disco')
-parser = MyParser.MyParser(testUrl)
-# text = parser.getSummary(3)
-text = parser.bpArtGetText()
-text = semantics.tokenize(text)
-text = semantics.pos_tag(text)
-text = semantics.remove_stops(text)
-print(text)
-adj = semantics.adjectives(text)
-verbs = semantics.verbs(text)
-print(verbs)
-print(adj)
-mut = semantics.common_words(text)
-aro_words = semantics.get_aro_words(text)
-semantics.similarWords(adj)
+lookup = AroLookup()
 
-# tuples = preprocess(parser.getText(), True)
-# reader = readEmoData()
-# reader = nameVsArousal(reader)
-# reader = sliceDict(reader)
-#text = parser.bpLargGetText()
-#text = tokenize(text)
-#model = model()
-#for word in text:
-    #print(model[word])
-# print(sorted(reader, key=reader.get))
-# print(parser.getText())
+def main(url):
+    parser = MyParser(url)
 
-# print(scoreWords(parser.bpGetText(), reader))
 
-# tokenized = tokenize(parser.bpgetText())
-#postagged = posTags(tokenized)
-#entities = entities2(postagged)
-#print(entities)
-#artists = searchTags(entities)
-#print(artists)
-#songs = getEnSongs(artists[0], 0.3)
-#print(songs)
 
-# tokenized = semantics.tokenize(text)
-# tuples = semantics.pos_tag(tokenized, False)
-# entities = semantics.entities(tuples)
-# print(entities)
-#aro_score = semantics.lookup_arousal(tokenized)
-#print(aro_score)
+
+if __name__ == '__main__':
+    main(sys.argv[1])

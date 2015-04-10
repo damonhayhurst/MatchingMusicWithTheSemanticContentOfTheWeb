@@ -1,11 +1,9 @@
 from gensim.models import word2vec
 import logging
 import csv
-import os
-import urllib3
+from semantics import tokenize, remove_stops
 import nltk.data
-from bs4 import BeautifulSoup
-import MyParser
+import my_parser
 
 _author_ = 'Damon Hayhurst'
 
@@ -27,7 +25,7 @@ def scrape_reviews(reader):
     count = 0
     for row in reader:
         url = row['url']
-        parser = MyParser(url)
+        parser = parser(url)
         article = parser.getEditorial()
         article = article.getText()
         article += article.replace(row['artist'], "ARTIST")
@@ -46,7 +44,20 @@ def line_sentences(sentences):
         print("%s\n" % sentence)
     output.close()
 
+class Sentences():
 
+    def __init__(self, path):
+        self.path = path
+
+    def __iter__(self):
+        file = open(self.path, 'r')
+        for i, line in enumerate(file):
+            line = line.lower()
+            line = tokenize(line)
+            line = remove_stops(line)
+            if line:
+                yield line
+        file.close()
 
 
 def save_model(sentences_file):
@@ -54,7 +65,7 @@ def save_model(sentences_file):
     model = word2vec.Word2Vec(sentences, size=20, workers=2, min_count=50, sample=1e-5)
     model.save(model_path)
 
-def get_model():
+def model():
     return model
 
 
