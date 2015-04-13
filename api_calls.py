@@ -2,8 +2,6 @@ import pylast
 import urllib
 import requests
 
-
-
 echoKey = 'TDXDFC1IYFMRRVQ4X'
 lastKey = 'd8219d97f94485160f28e2d5ffbd9265'
 lastSecret = '6eab593834b26c84949a404810b1b194'
@@ -98,7 +96,7 @@ def getEnTerms(artist):
     return terms
 
 def getTracks(artist):
-    network = pylast.LastFMNetwork(api_key = lastKey, api_secret = lastSecret, username = lastUser, password_hash = lastPass)
+    network = pylast.LastFMNetwork(api_key=lastKey, api_secret=lastSecret, username = lastUser, password_hash = lastPass)
     tracks = []
     artistLF = network.get_artist(artist)
     tracks = artistLF.get_top_tracks()
@@ -106,8 +104,6 @@ def getTracks(artist):
 
 
 def getLastFM(artist, song):
-
-
 
     network = pylast.LastFMNetwork(api_key = lastKey, api_secret = lastSecret, username = lastUser, password_hash = lastPass)
     tags = []
@@ -130,3 +126,14 @@ def getLastFM(artist, song):
     except:
         print("last fm call failed")
         return {'na'}
+
+#Formats a Google Search Url for internal search of Last.Fm. The site is queried with multiple tags.
+
+def tagSearch(*tags):
+    url = 'http://ajax.googleapis.com/ajax/services/search/web?v=1.0&q='
+    query = 'site:last.fm%2Fmusic+intitle:"tags+for"'
+    for tag in tags:
+        tag = '+' + '"' + tag + '"'
+        query += tag
+    url = url + query
+    return str(url)

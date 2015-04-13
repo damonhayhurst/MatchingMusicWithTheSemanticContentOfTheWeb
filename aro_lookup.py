@@ -13,7 +13,7 @@ class AroLookup():
         self.lookup = self.filter_lookup(self.lookup, low_percent_bound, high_percent_bound)
 
     def read_arousal(self, file):
-        file = open(self.file, 'r')
+        file = open(file, 'r')
         file_reader = DictReader(file, delimiter='\t')
         lookup = {}
         for row in file_reader:

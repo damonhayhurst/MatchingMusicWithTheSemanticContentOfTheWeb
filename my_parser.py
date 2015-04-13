@@ -89,6 +89,9 @@ class MyParser:
             urls.append(url)
         return urls
 
+    def getResults(self):
+        return self.result_count
+
 
 
 
