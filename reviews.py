@@ -12,7 +12,6 @@ review_sent = "artSentences.txt"
 tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
 model_path = "rModel"
 model = word2vec.Word2Vec.load(model_path)
-logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 
 
 def read_reviews():
@@ -44,7 +43,7 @@ def line_sentences(sentences):
         print("%s\n" % sentence)
     output.close()
 
-class Sentences():
+class Sentences(object):
 
     def __init__(self, path):
         self.path = path
@@ -65,7 +64,5 @@ def save_model(sentences_file):
     model = word2vec.Word2Vec(sentences, size=20, workers=2, min_count=50, sample=1e-5)
     model.save(model_path)
 
-def model():
-    return model
 
 

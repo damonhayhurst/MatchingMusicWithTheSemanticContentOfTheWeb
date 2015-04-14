@@ -48,7 +48,6 @@ def remove_stops(document):
 def text_to_pos_tags(text):
     tokenized = tokenize(text)
     tuples = pos_tag(tokenized)
-    tuples = remove_stops(tuples)
     return tuples
 
 #Uses nltk's named entity recognition in order to return a list of proper nouns extracted from the text
@@ -56,9 +55,22 @@ def text_to_pos_tags(text):
 
 def entities(tuples, *labels):
     chunky = nltk.ne_chunk(tuples)
-    entities = [' '.join([y[0] for y in chunk.leaves()]) for chunk in chunky.subtrees() if chunk.label() == [label for label in labels]]
+    entities = []
+    if "PER" in labels:
+        entities.extend([' '.join([y[0] for y in chunk.leaves()]) for chunk in chunky.subtrees() if chunk.label() == "PERSON"])
+    if "ORG" in labels:
+        entities.extend([' '.join([y[0] for y in chunk.leaves()]) for chunk in chunky.subtrees() if chunk.label() == "ORGANIZATION"])
+    if "LOC" in labels:
+        entities.extend([' '.join([y[0] for y in chunk.leaves()]) for chunk in chunky.subtrees() if chunk.label() == "LOCATION"])
+    if "DAT" in labels:
+        entities.extend([' '.join([y[0] for y in chunk.leaves()]) for chunk in chunky.subtrees() if chunk.label() == "DATE"])
+    if "FAC" in labels:
+        entities.extend([' '.join([y[0] for y in chunk.leaves()]) for chunk in chunky.subtrees() if chunk.label() == "FACILITY"])
+    if "GPE" in labels:
+        entities.extend([' '.join([y[0] for y in chunk.leaves()]) for chunk in chunky.subtrees() if chunk.label() == "GPE"])
+    print(entities)
     count = collections.Counter(entities)
-    return sorted(count.items(), key=count.get(), reverse=True)
+    return sorted(entities, key=count.get, reverse=True)
 
 #Extracts any verbs from a PoS tagged list of words. Verbs that do not convey an emotion are ignored in a manual list, such as the verb to be. Returns
 #a list of tuples sorted in by number of occurences. (x,y) y being number of occurences.
@@ -133,9 +145,11 @@ def tuple_check(word):
     else:
         return word
 
-def ordered_set_of_tags(*words):
+def ordered_set_of_tags(words):
     set_words = []
+    lower_words = []
     for word in words:
-        if word.lower not in set_words:
-            set_words.append(word.lower())
+        if word.lower() not in lower_words:
+            lower_words.append(word.lower())
+            set_words.append(word)
     return set_words

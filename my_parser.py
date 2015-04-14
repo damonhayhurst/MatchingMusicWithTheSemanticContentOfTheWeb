@@ -10,7 +10,7 @@ import json
 import re
 
 
-class MyParser:
+class MyParser(object):
 
     def __init__(self, url):
         http = urllib3.PoolManager()

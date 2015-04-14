@@ -3,7 +3,7 @@ from semantics import stem, tuple_check
 
 __author__ = 'Damon Hayhurst'
 
-class AroLookup():
+class AroLookup(object):
 
     def __init__(self, filter_bounds = [40, 60]):
         emo_file = 'emo_file.txt'

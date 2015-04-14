@@ -1,3 +1,4 @@
+import logging
 from my_parser import MyParser
 from aro_lookup import AroLookup
 from api_calls import tagSearch
@@ -10,14 +11,22 @@ testSentence = "This is an ultimate, to beat Chelsea, who I think will go on and
 
 lookup = AroLookup()
 tag_dict = {}
+logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 
+parser = MyParser(testUrl)
+text = parser.bpArtGetText()
+print(text)
+pos_tagged = semantics.text_to_pos_tags(text)
+entities = semantics.entities(pos_tagged, "PER", "ORG", "LOC", "DAT", "FAC", "GPE")
+print(entities)
+print(semantics.ordered_set_of_tags(entities))
 
 def main(url):
     parser = MyParser(url)
     text = parser.bpArtGetText()
     print(text)
     pos_tagged = semantics.text_to_pos_tags(text)
-    entities = semantics.entities(pos_tagged, "PERSON", "ORGANIZATION", "LOCATION", "DATE", "FACILITY", "GPE")
+    entities = semantics.entities(pos_tagged, "PER", "ORG", "LOC", "DAT", "FAC", "GPE")
     entities = semantics.ordered_set_of_tags(entities)
     adjectives = semantics.adjectives(pos_tagged)
     adjectives = semantics.ordered_set_of_tags(adjectives)
