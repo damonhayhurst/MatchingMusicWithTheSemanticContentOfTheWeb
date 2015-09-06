@@ -2,11 +2,11 @@ import pylast
 import urllib
 import requests
 
-echoKey = 'TDXDFC1IYFMRRVQ4X'
-lastKey = 'd8219d97f94485160f28e2d5ffbd9265'
-lastSecret = '6eab593834b26c84949a404810b1b194'
-lastUser = 'damonhayhurst'
-lastPass = pylast.md5('Bortime11')
+echoKey =
+lastKey = 
+lastSecret =
+lastUser =
+lastPass = 
 
 #code from getgenres.py by nickjevershed, url: https://gist.github.com/nickjevershed/8589517
 
