@@ -2,11 +2,7 @@ import pylast
 import urllib
 import requests
 
-echoKey =
-lastKey = 
-lastSecret =
-lastUser =
-lastPass = 
+echoKey = #echoNest key goes here
 
 #code from getgenres.py by nickjevershed, url: https://gist.github.com/nickjevershed/8589517
 
